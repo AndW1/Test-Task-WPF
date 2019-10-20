@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,33 +13,22 @@ namespace TestTaskWPF.DAO.DataBaseUtils
     {
         private TaskNodeContext _taskNodeContext;
         private TaskNode _taskNode;
-        private string status;
-
+      
         public AddNewTask(TaskNodeContext taskNodeContext, TaskNode taskNode)
         {
             this._taskNodeContext = taskNodeContext;
             this._taskNode = taskNode;
+            this._taskNode.Status = SetStatus(taskNode);
         }
 
 
-
         public void Execute()
-        {
-            SetStatus();
+        {      
             try
-            {
-                _taskNodeContext.TaskNodes.Add(new TaskNode
-                {
-                    Title = _taskNode.Title,
-                    DateCreate = _taskNode.DateCreate,
-                    Status = status,
-                    DateFinish = _taskNode.DateFinish,
-                    DateStart = _taskNode.DateStart,
-                    IsFinish = _taskNode.IsFinish,
-                    IsProgress = _taskNode.IsProgress,
-                    IsStart = _taskNode.IsStart
+              {
+               
+                _taskNodeContext.TaskNodes.Add(_taskNode);
 
-                });
                 _taskNodeContext.SaveChanges();
             }
             catch (Exception e)
@@ -48,20 +38,21 @@ namespace TestTaskWPF.DAO.DataBaseUtils
 
         }
 
-        private void SetStatus()
+       private string SetStatus(TaskNode task)
         {
-            if (_taskNode.IsStart)
+            if (task.IsStart)
             {
-                status = "Не начата";
+                return "Не начата";
             }
-            if (_taskNode.IsProgress)
+            else if (task.IsProgress)
             {
-                status = "В работе";
+                return "В работе";
             }
-            if (_taskNode.IsFinish)
+            else
             {
-                status = "Выполнена";
+                return "Выполнена";
             }
         }
+
     }
 }

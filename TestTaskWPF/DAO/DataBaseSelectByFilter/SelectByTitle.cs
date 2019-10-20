@@ -24,7 +24,7 @@ namespace TestTaskWPF.DAO.DataBaseSelectByFilter
         {
             try
             {
-                return _taskNodeContext.TaskNodes.Where(n => n.Title == _title).Select(n => n).ToList();
+                return _taskNodeContext.TaskNodes.Where(n => n.Title.StartsWith(_title)).Select(n => n).ToList();
             }
             catch (Exception e)
             {

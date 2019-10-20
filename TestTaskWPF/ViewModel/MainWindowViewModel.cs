@@ -31,6 +31,7 @@ namespace TestTaskWPF.ViewModel
             {
                 obj = new DataAccessObject(new SelectAllTask(taskNodeContext));
                 ListTask = new ObservableCollection<TaskNode>(obj.ExecuteFilter() as List<TaskNode>);
+             
             }
             catch (Exception ex)
             {
@@ -85,13 +86,30 @@ namespace TestTaskWPF.ViewModel
 
 
         //добавление новой задачи
+
         private void _createNodeWindow_TaskPropertyChanged(object sender, EventArgs e)
         {
             TaskNode taskNode = _createNodeWindow.TaskNode;
             _createNodeWindow.Close();
+
+
+            TaskNode new_task = new TaskNode
+            {
+                Title = taskNode.Title,
+                DateCreate = taskNode.DateCreate,
+                DateFinish = taskNode.DateFinish,
+                DateStart = taskNode.DateStart,
+                IsFinish = taskNode.IsFinish,
+                IsProgress = taskNode.IsProgress,
+                IsStart = taskNode.IsStart
+
+            };
+
+           
             try
             {
-                obj = new DataAccessObject(new AddNewTask(taskNodeContext, taskNode));
+
+                obj = new DataAccessObject(new AddNewTask(taskNodeContext, new_task));
                 obj.ExecuteUtils();
             }
             catch (Exception ex)
@@ -149,5 +167,8 @@ namespace TestTaskWPF.ViewModel
             catch { }
         }
 
+
+
+       
     }
 }
